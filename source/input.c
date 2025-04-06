@@ -3279,6 +3279,9 @@ int input_read_parameters_species(struct file_content * pfc,
       else if ((strstr(string1,"EDE") != NULL) || (strstr(string1,"ede") != NULL)) {
         pba->fluid_equation_of_state = EDE;
       }
+      else if ((strstr(string1,"UDME") != NULL) || (strstr(string1,"udme") != NULL)) {
+        pba->fluid_equation_of_state = UDME;
+      }
       else {
         class_stop(errmsg,"incomprehensible input '%s' for the field 'fluid_equation_of_state'",string1);
       }
@@ -3296,6 +3299,13 @@ int input_read_parameters_species(struct file_content * pfc,
       /* Read */
       class_read_double("w0_fld",pba->w0_fld);
       class_read_double("Omega_EDE",pba->Omega_EDE);
+      class_read_double("cs2_fld",pba->cs2_fld);
+    }
+    if (pba->fluid_equation_of_state == UDME) {
+      /** 8.a.2.4) Equation of state of the fluid in 'UDME' case */
+      /* Read */
+      class_read_double("DMDE0",pba->DMDE0);
+      class_read_double("dVdN0",pba->dVdN0);
       class_read_double("cs2_fld",pba->cs2_fld);
     }
   }
