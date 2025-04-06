@@ -702,6 +702,9 @@ int background_w_fld(
     // w_ede(a) taken from eq. (11) in 1706.00730
     *w_fld = - dOmega_ede_over_da*a/Omega_ede/3./(1.-Omega_ede)+a_eq/3./(a+a_eq);
     break;
+  case UDME:
+    *w_fld = -1. + pba->DMDE0/(pba->DMDE0+pow(a,3))*(1. - 2./3.*pba->dVdN0*pow(a,3)/(pba->DMDE0+pow(a,3))*(sqrt(1.+pba->DMDE0)/pba->DMDE0-pow(a,3)*sqrt(1.+pba->DMDE0*pow(a,-3))/pba->DMDE0-log(sqrt(1.+pba->DMDE0)-1.)+a*sqrt(a*(1.+pba->DMDE0*pow(a,-3))/(pba->DMDE0+pow(a,3)))*log(sqrt(pba->DMDE0+pow(a,3)-a*sqrt(a)))));
+    break;
   }
 
 
@@ -721,6 +724,9 @@ int background_w_fld(
       + dOmega_ede_over_da*dOmega_ede_over_da*a/3./(1.-Omega_ede)/(1.-Omega_ede)/Omega_ede
       + a_eq/3./(a+a_eq)/(a+a_eq);
     break;
+  case UDME:
+    *dw_over_da_fld = a*a/pow(pba->DMDE0+pow(a,3),3)*(-3.*pba->DMDE0*pba->DMDE0-2.*pba->DMDE0*sqrt(1.+pba->DMDE0)*pba->dVdN0+2.*sqrt(1.+pba->DMDE0)*pba->dVdN0*pow(a,3)+pba->DMDE0*pow(a,3)*(4.*pba->dVdN0*sqrt(1.+pba->DMDE0*pow(a,-3))-3.)+2.*pba->DMDE0*pba->dVdN0*(pow(a,3)-pba->DMDE0)*(a*sqrt(a*(1.+pba->DMDE0*pow(a,-3))/(pba->DMDE0+pow(a,3)))*log(sqrt(pba->DMDE0+pow(a,3)-a*sqrt(a)))-log(sqrt(1.+pba->DMDE0)-1.)));
+    break;
   }
 
   /** - finally, give the analytic solution of the following integral:
@@ -739,6 +745,9 @@ int background_w_fld(
     break;
   case EDE:
     class_stop(pba->error_message,"EDE implementation not finished: to finish it, read the comments in background.c just before this line\n");
+    break;
+  case UDME:
+    *integral_fld = log((pow(a,3)+pba->DMDE0)/pow(a,3)/(1.+pba->DMDE0)) + 2./3.*pba->dVdN0/(pow(a,3)+pba->DMDE0)*(a*sqrt(a*(pow(a,3)+pba->DMDE0))-sqrt(1.+pba->DMDE0)+2.*pow(a,3)*log((1.+sqrt(1.+pba->DMDE0))/(a*sqrt(a)+sqrt(pow(a,3)+pba->DMDE0))));
     break;
   }
 
